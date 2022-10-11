@@ -10,5 +10,4 @@ data class Response(
     val logo: String,
     val country: Country,
     val seasons: List<Season>,
-
-    )
+)

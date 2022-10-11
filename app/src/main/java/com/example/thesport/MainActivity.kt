@@ -1,8 +1,8 @@
 package com.example.thesport
 
-import android.icu.text.CaseMap
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -13,17 +13,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,13 +27,8 @@ import androidx.lifecycle.lifecycleScope
 import com.example.thesport.data.remote.TheSportRetrofitInstance
 import com.example.thesport.ui.theme.TheSportTheme
 import kotlinx.coroutines.launch
-import okhttp3.Headers
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import retrofit2.HttpException
 import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +48,21 @@ class MainActivity : ComponentActivity() {
 
                             lifecycleScope.launch(){
                                 val response = try{
-                                    TheSportRetrofitInstance.api.getLeagues()
+                                //working api call for status
+//                                    TheSportRetrofitInstance.api.getStatus().apply {
+//                                        Log.d(TAG, "response: $response")
+//                                        Log.d(TAG, "get: $get")
+//                                        Log.d(TAG, "parameters: $parameters")
+//                                    }
+                                // working api call for leagues
+                                    // league id 57 = NHL
+                                    TheSportRetrofitInstance.api.getLeagues(57).apply {
+                                        Log.d(TAG, "response: $response")
+                                        Log.d(TAG, "get $get")
+                                        Log.d(TAG, "parameters $parameters")
+                                        Log.d(TAG, "results $results")
+                                    }
+                                    Toast.makeText(this@MainActivity, "api call successful", Toast.LENGTH_SHORT).show()
                                 }catch (e: IOException){
                                     Log.e(TAG, "Might not have internet")
                                     return@launch
@@ -66,19 +70,27 @@ class MainActivity : ComponentActivity() {
                                     Log.e(TAG, "Unexpected response")
                                     return@launch
                                 }
-                                if(response.isSuccessful && response.body() != null){
-                                    println(response)
-                                }else {
-                                    Log.e(TAG, "response not successful")
+                                catch(e: Exception) {
+                                    Log.e(TAG, "exception while handling api request: $e")
+                                    return@launch
                                 }
+
+                                // this response variable is of type Kotlin.Unit
+                                // unable to access data object params form here
+                                Log.d(TAG, "response: $response \n")
+                                Log.d(TAG, response.toString())
+                                print(response)
+
+//                                if(response.isSuccessful && response.body() != null){
+//                                    println(response)
+//                                }else {
+//                                    Log.e(TAG, "response not successful")
+//                                }
                             }
 
                         }) {
                             Text(text = "Make API Call")
-
                         }
-
-
 
 
                     Spacer(modifier = Modifier.height(150.dp))
