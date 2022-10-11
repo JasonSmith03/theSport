@@ -28,10 +28,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
+import com.example.thesport.data.remote.TheSportRetrofitInstance
 import com.example.thesport.ui.theme.TheSportTheme
+import kotlinx.coroutines.launch
 import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import retrofit2.HttpException
+import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -45,7 +50,37 @@ class MainActivity : ComponentActivity() {
                 val descriptionTeam1 = "Toronto Maple Leafs"
                 val descriptionTeam2 = "Colorado Avalanche"
 
+                val TAG = "MainActivity"
+
                 Column(modifier = Modifier.fillMaxSize()) {
+
+                        Button(onClick = {
+
+                            lifecycleScope.launch(){
+                                val response = try{
+                                    TheSportRetrofitInstance.api.getLeagues()
+                                }catch (e: IOException){
+                                    Log.e(TAG, "Might not have internet")
+                                    return@launch
+                                }catch (e: HttpException){
+                                    Log.e(TAG, "Unexpected response")
+                                    return@launch
+                                }
+                                if(response.isSuccessful && response.body() != null){
+                                    println(response)
+                                }else {
+                                    Log.e(TAG, "response not successful")
+                                }
+                            }
+
+                        }) {
+                            Text(text = "Make API Call")
+
+                        }
+
+
+
+
                     Spacer(modifier = Modifier.height(150.dp))
                     LazyRow(modifier = Modifier
                         .fillMaxWidth(),
