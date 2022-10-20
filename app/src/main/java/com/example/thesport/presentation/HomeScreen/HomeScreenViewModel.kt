@@ -1,4 +1,4 @@
-package com.example.thesport.ui.HomeScreen
+package com.example.thesport.presentation.HomeScreen
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
