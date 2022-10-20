@@ -17,11 +17,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.thesport.ui.theme.TheSportTheme
 import com.example.thesport.R
 
 @Composable
-fun BettingInfo(
+fun BettingInfoCard(
     contentDescriptionTeam1: String,
     contentDescriptionTeam2: String,
     logoTeam1: Painter,
@@ -124,5 +123,5 @@ fun BettingInfoPreview(){
     val team2Logo = painterResource(id = R.drawable.avs)
     val descriptionTeam1 = "Toronto Maple Leafs"
     val descriptionTeam2 = "Colorado Avalanche"
-    BettingInfo(descriptionTeam1, descriptionTeam2, team1Logo, team2Logo)
+    BettingInfoCard(descriptionTeam1, descriptionTeam2, team1Logo, team2Logo)
 }
