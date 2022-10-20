@@ -30,8 +30,6 @@ interface SportApi {
         const val API_KEY = BuildConfig.API_KEY
         const val BASE_URL = "https://v1.hockey.api-sports.io"
     }
-
-
 }
 
 object TheSportRetrofitInstance{

@@ -1,8 +1,6 @@
 package com.example.thesport
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
@@ -24,78 +22,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.lifecycleScope
-import com.example.thesport.data.remote.TheSportRetrofitInstance
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.thesport.ui.HomeScreen.GameCard
+import com.example.thesport.ui.HomeScreen.HomeScreenViewModel
 import com.example.thesport.ui.theme.TheSportTheme
-import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
 import java.util.*
 
 const val TAG = "MainActivity"
+lateinit var viewModel: HomeScreenViewModel
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             TheSportTheme() {
                 Scaffold(
                 ) { padding ->
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        // this is here simply for testing purposes. Will be removed.
-                        Button(onClick = {
-                            lifecycleScope.launch() {
-                                val response = try {
-//                                working api call for status
-//                                TheSportRetrofitInstance.api.getStatus().apply {
-//                                        Log.d(TAG, "response: $response")
-//                                        Log.d(TAG, "get: $get")
-//                                        Log.d(TAG, "parameters: $parameters")
-//                                    }
-                                    // working api call for leagues
-                                    // league id 57 = NHL
-                                    TheSportRetrofitInstance.api.getLeagues(57).apply {
-                                        Log.d(TAG, "response: $response")
-                                        Log.d(TAG, "get $get")
-                                        Log.d(TAG, "parameters $parameters")
-                                        Log.d(TAG, "results $results")
-                                    }
-                                    Toast.makeText(
-                                        this@MainActivity,
-                                        "api call successful",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                } catch (e: IOException) {
-                                    Log.e(TAG, "Might not have internet")
-                                    return@launch
-                                } catch (e: HttpException) {
-                                    Log.e(TAG, "Unexpected response")
-                                    return@launch
-                                } catch (e: Exception) {
-                                    Log.e(TAG, "exception while handling api request: $e")
-                                    return@launch
-                                }
-
-                                // this response variable is of type Kotlin.Unit
-                                // unable to access data object params form here
-                                Log.d(TAG, "response: $response \n")
-                                Log.d(TAG, response.toString())
-                                print(response)
-
-//                                if(response.isSuccessful && response.body() != null){
-//                                    println(response)
-//                                }else {
-//                                    Log.e(TAG, "response not successful")
-//                                }
-                            }
-
-                        }) {
-                            Text(text = "Make API Call")
-                        }
-                        Spacer(modifier = Modifier.height(30.dp))
-                        HomeScreen(Modifier.padding(padding))
-                    }
+                    HomeScreen(Modifier.padding(padding))
                 }
             }
         }
@@ -264,11 +208,20 @@ fun HomeSection( // might be considered as "too refactored"
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
+
+    viewModel = viewModel<HomeScreenViewModel>()
+
     val team1Logo = painterResource(id = R.drawable.leafs)
     val team2Logo = painterResource(id = R.drawable.avs)
     val descriptionTeam1 = "Toronto Maple Leafs"
     val descriptionTeam2 = "Colorado Avalanche"
     Column(modifier) {
+        Button(onClick = {
+//            viewModel.testApiCall()
+            viewModel.apiStatus()
+        }) {
+            Text(text = "Make API Call")
+        }
         Spacer(Modifier.height(16.dp))
         HomeSection(title = R.string.today_games) {
             AlignTodaysGames(descriptionTeam1, descriptionTeam2, team1Logo, team2Logo)
