@@ -5,19 +5,24 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,40 +34,33 @@ import com.example.thesport.ui.theme.TheSportTheme
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import java.util.*
 
 class MainActivity : ComponentActivity() {
+    val TAG = "MainActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             TheSportTheme{
-                val team1Logo = painterResource(id = R.drawable.leafs)
-                val team2Logo = painterResource(id = R.drawable.avs)
-                val descriptionTeam1 = "Toronto Maple Leafs"
-                val descriptionTeam2 = "Colorado Avalanche"
-
-                val TAG = "MainActivity"
-
                 Column(modifier = Modifier.fillMaxSize()) {
-
-                        Button(onClick = {
-
-                            lifecycleScope.launch(){
-                                val response = try{
-                                //working api call for status
-//                                    TheSportRetrofitInstance.api.getStatus().apply {
+                    Button(onClick = {
+                        lifecycleScope.launch(){
+                            val response = try{
+//                                working api call for status
+//                                TheSportRetrofitInstance.api.getStatus().apply {
 //                                        Log.d(TAG, "response: $response")
 //                                        Log.d(TAG, "get: $get")
 //                                        Log.d(TAG, "parameters: $parameters")
 //                                    }
                                 // working api call for leagues
-                                    // league id 57 = NHL
-                                    TheSportRetrofitInstance.api.getLeagues(57).apply {
-                                        Log.d(TAG, "response: $response")
-                                        Log.d(TAG, "get $get")
-                                        Log.d(TAG, "parameters $parameters")
-                                        Log.d(TAG, "results $results")
-                                    }
-                                    Toast.makeText(this@MainActivity, "api call successful", Toast.LENGTH_SHORT).show()
+                                // league id 57 = NHL
+                                TheSportRetrofitInstance.api.getLeagues(57).apply {
+                                    Log.d(TAG, "response: $response")
+                                    Log.d(TAG, "get $get")
+                                    Log.d(TAG, "parameters $parameters")
+                                    Log.d(TAG, "results $results")
+                                }
+                                Toast.makeText(this@MainActivity, "api call successful", Toast.LENGTH_SHORT).show()
                                 }catch (e: IOException){
                                     Log.e(TAG, "Might not have internet")
                                     return@launch
@@ -91,26 +89,11 @@ class MainActivity : ComponentActivity() {
                         }) {
                             Text(text = "Make API Call")
                         }
+                    Spacer(modifier = Modifier.height(30.dp))
+                    //LOADS HOME SCREEN
+                    TheSportApp()
 
-
-                    Spacer(modifier = Modifier.height(150.dp))
-                    LazyRow(modifier = Modifier
-                        .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        items (4){
-                            LiveMatchCard(descriptionTeam1, descriptionTeam2, team1Logo, team2Logo)
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(50.dp))
-                    LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)){
-                        items(4){
-                            MoneyLine(
-                                contentDescriptionTeam1 = descriptionTeam1,
-                                contentDescriptionTeam2 = descriptionTeam2,
-                                logoTeam1 = team1Logo,
-                                logoTeam2 = team2Logo)
-                        }
-                    }
+// COLUMN BRACKET
                 }
             }
         }
@@ -118,7 +101,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun LiveMatchCard(
+fun TodaysGameCard(
     contentDescriptionTeam1: String,
     contentDescriptionTeam2: String,
     logoTeam1: Painter,
@@ -128,7 +111,7 @@ fun LiveMatchCard(
     Card(
         modifier = modifier
             .width(250.dp)
-            .height(150.dp),
+            .height(100.dp),
         shape = RoundedCornerShape(15.dp),
         elevation = 5.dp
     ) {
@@ -142,9 +125,9 @@ fun LiveMatchCard(
                 horizontalArrangement = Arrangement.SpaceEvenly) {
 
                 //team image
-                Image(painter = logoTeam1, contentDescription = contentDescriptionTeam1, modifier = modifier
-                    .width(30.dp)
-                    .height(30.dp))
+                Image(painter = logoTeam1, contentDescription = contentDescriptionTeam1, contentScale = ContentScale.FillBounds,modifier = modifier
+                    .size(40.dp)
+                    .clip(CircleShape))
 
                 //team name
                 Text(text = "Toronto Maple Leafs", fontSize = 14.sp, fontFamily = FontFamily.Default)
@@ -159,15 +142,15 @@ fun LiveMatchCard(
                 horizontalArrangement = Arrangement.SpaceEvenly) {
 
                 //team image
-                Image(painter = logoTeam2, contentDescription = contentDescriptionTeam2, modifier = modifier
-                    .width(30.dp)
-                    .height(30.dp))
+                Image(painter = logoTeam2, contentDescription = contentDescriptionTeam2, contentScale = ContentScale.FillBounds, modifier = modifier
+                    .size(40.dp)
+                    .clip(CircleShape))
 
                 //team name
                 Text(text = "Colorado Avalanche", fontSize = 14.sp, fontFamily = FontFamily.Default)
 
                 //team score
-                Text(text = "1")
+                Text(text = "3")
             }
         }
     }
@@ -175,19 +158,21 @@ fun LiveMatchCard(
 
 
 @Composable
-fun MoneyLine(
+fun BettingInfo(
     contentDescriptionTeam1: String,
     contentDescriptionTeam2: String,
     logoTeam1: Painter,
     logoTeam2: Painter,
     modifier: Modifier = Modifier) {
 
-    Card(
+    Surface(
         modifier = modifier
             .width(400.dp)
-            .height(150.dp),
-        shape = RoundedCornerShape(15.dp),
-        elevation = 5.dp
+            .height(100.dp),
+ //       modifier = modifier,
+        //shape = RoundedCornerShape(15.dp),
+        shape = MaterialTheme.shapes.small
+        //elevation = 5.dp
     ) {
         Column(modifier = Modifier
             .fillMaxWidth(),
@@ -199,7 +184,7 @@ fun MoneyLine(
                 horizontalArrangement = Arrangement.SpaceEvenly) {
 
                 //team image
-                Image(painter = logoTeam1, contentDescription = contentDescriptionTeam1, modifier = modifier
+                Image(painter = logoTeam1, contentDescription = contentDescriptionTeam1, contentScale = ContentScale.Crop, modifier = modifier
                     .width(30.dp)
                     .height(30.dp))
 
@@ -235,7 +220,7 @@ fun MoneyLine(
                 horizontalArrangement = Arrangement.SpaceEvenly) {
 
                 //team image
-                Image(painter = logoTeam2, contentDescription = contentDescriptionTeam2, modifier = modifier
+                Image(painter = logoTeam2, contentDescription = contentDescriptionTeam2, contentScale = ContentScale.Crop, modifier = modifier
                     .width(30.dp)
                     .height(30.dp))
 
@@ -270,20 +255,140 @@ fun MoneyLine(
 }
 
 
+@Composable
+fun AlignTodaysGames(
+    contentDescriptionTeam1: String,
+    contentDescriptionTeam2: String,
+    logoTeam1: Painter,
+    logoTeam2: Painter,
+    modifier: Modifier = Modifier
+) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        modifier = modifier
+    ) {
+        //TODO pass a list and send each team instance to create a card
+        items(4) {
+            TodaysGameCard(contentDescriptionTeam1, contentDescriptionTeam2, logoTeam1, logoTeam2)
+        }
+    }
+}
+
+@Composable
+fun AlignBettingInfo(
+    contentDescriptionTeam1: String,
+    contentDescriptionTeam2: String,
+    logoTeam1: Painter,
+    logoTeam2: Painter,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        modifier = modifier
+    ) {
+        //TODO pass a list and send each team instance to create a card
+        items(6) {
+            BettingInfo(contentDescriptionTeam1, contentDescriptionTeam2, logoTeam1, logoTeam2)
+        }
+    }
+    Spacer(modifier = modifier
+        .height(20.dp))
+}
+
+//Home section - Slot APIs
+@Composable
+fun HomeSection(
+    @StringRes title: Int,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Column(modifier) {
+        Text(
+            text = stringResource(title).uppercase(Locale.getDefault()),
+            style = MaterialTheme.typography.body1,
+            modifier = Modifier
+                .paddingFromBaseline(top = 40.dp, bottom = 8.dp)
+                .padding(horizontal = 16.dp)
+        )
+        content()
+    }
+}
+
+@Composable
+fun HomeScreen(modifier: Modifier = Modifier) {
+    val team1Logo = painterResource(id = R.drawable.leafs)
+    val team2Logo = painterResource(id = R.drawable.avs)
+    val descriptionTeam1 = "Toronto Maple Leafs"
+    val descriptionTeam2 = "Colorado Avalanche"
+    Column(modifier) {
+        Spacer(Modifier.height(16.dp))
+        HomeSection(title = R.string.today_games) {
+            AlignTodaysGames(descriptionTeam1, descriptionTeam2, team1Logo, team2Logo)
+        }
+        HomeSection(title = R.string.betting_info) {
+            AlignBettingInfo(descriptionTeam1, descriptionTeam2, team1Logo, team2Logo)
+        }
+        Spacer(Modifier.height(16.dp))
+    }
+}
+
+// Step: MySoothe App - Scaffold
+@Composable
+fun TheSportApp() {
+    TheSportTheme() {
+        Scaffold(
+        ) { padding ->
+            HomeScreen(Modifier.padding(padding))
+        }
+    }
+}
+
 @Preview (showBackground = true)
 @Composable
-fun prevImageCard(){
+fun TodaysGamesPreview(){
+    TheSportTheme() {
+        val team1Logo = painterResource(id = R.drawable.leafs)
+        val team2Logo = painterResource(id = R.drawable.avs)
+        val descriptionTeam1 = "Toronto Maple Leafs"
+        val descriptionTeam2 = "Colorado Avalanche"
+        TodaysGameCard(descriptionTeam1, descriptionTeam2, team1Logo , team2Logo)
+    }
+}
+
+@Preview (showBackground = true)
+@Composable
+fun BettingInfoPreview(){
     TheSportTheme{
         val team1Logo = painterResource(id = R.drawable.leafs)
         val team2Logo = painterResource(id = R.drawable.avs)
         val descriptionTeam1 = "Toronto Maple Leafs"
         val descriptionTeam2 = "Colorado Avalanche"
-        LazyColumn(modifier = Modifier
-            .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            item (4){
-                MoneyLine(descriptionTeam1, descriptionTeam2, team1Logo, team2Logo)
-            }
-        }
+        BettingInfo(descriptionTeam1, descriptionTeam2, team1Logo, team2Logo)
+    }
+}
+
+@Preview (showBackground = true)
+@Composable
+fun AlignTodaysGamesPreview(){
+    TheSportTheme{
+        val team1Logo = painterResource(id = R.drawable.leafs)
+        val team2Logo = painterResource(id = R.drawable.avs)
+        val descriptionTeam1 = "Toronto Maple Leafs"
+        val descriptionTeam2 = "Colorado Avalanche"
+        AlignTodaysGames(descriptionTeam1, descriptionTeam2, team1Logo, team2Logo)
+    }
+}
+
+@Preview (showBackground = true)
+@Composable
+fun AlignBettingInfoPreview(){
+    TheSportTheme{
+        val team1Logo = painterResource(id = R.drawable.leafs)
+        val team2Logo = painterResource(id = R.drawable.avs)
+        val descriptionTeam1 = "Toronto Maple Leafs"
+        val descriptionTeam2 = "Colorado Avalanche"
+        AlignBettingInfo(descriptionTeam1, descriptionTeam2, team1Logo, team2Logo)
     }
 }

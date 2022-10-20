@@ -27,8 +27,9 @@ interface SportApi {
 
 
     companion object {
-        const val API_KEY = "5d8420e5c432ced17813f85f0eb8663d"
+        const val API_KEY = "a3fa8171e98ed0d24d9fad81f9a99dd0"
         const val BASE_URL = "https://v1.hockey.api-sports.io"
+        const val API_KEY_B = "45d2c07ca2d5a585d737fe26afc75a89"
     }
 
 
