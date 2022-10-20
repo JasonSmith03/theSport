@@ -11,13 +11,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -30,45 +26,53 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import com.example.thesport.data.remote.TheSportRetrofitInstance
+import com.example.thesport.ui.HomeScreen.GameCard
 import com.example.thesport.ui.theme.TheSportTheme
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 import java.util.*
 
+const val TAG = "MainActivity"
+
 class MainActivity : ComponentActivity() {
-    val TAG = "MainActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TheSportTheme{
-                Column(modifier = Modifier.fillMaxSize()) {
-                    Button(onClick = {
-                        lifecycleScope.launch(){
-                            val response = try{
+            TheSportTheme() {
+                Scaffold(
+                ) { padding ->
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        // this is here simply for testing purposes. Will be removed.
+                        Button(onClick = {
+                            lifecycleScope.launch() {
+                                val response = try {
 //                                working api call for status
 //                                TheSportRetrofitInstance.api.getStatus().apply {
 //                                        Log.d(TAG, "response: $response")
 //                                        Log.d(TAG, "get: $get")
 //                                        Log.d(TAG, "parameters: $parameters")
 //                                    }
-                                // working api call for leagues
-                                // league id 57 = NHL
-                                TheSportRetrofitInstance.api.getLeagues(57).apply {
-                                    Log.d(TAG, "response: $response")
-                                    Log.d(TAG, "get $get")
-                                    Log.d(TAG, "parameters $parameters")
-                                    Log.d(TAG, "results $results")
-                                }
-                                Toast.makeText(this@MainActivity, "api call successful", Toast.LENGTH_SHORT).show()
-                                }catch (e: IOException){
+                                    // working api call for leagues
+                                    // league id 57 = NHL
+                                    TheSportRetrofitInstance.api.getLeagues(57).apply {
+                                        Log.d(TAG, "response: $response")
+                                        Log.d(TAG, "get $get")
+                                        Log.d(TAG, "parameters $parameters")
+                                        Log.d(TAG, "results $results")
+                                    }
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "api call successful",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } catch (e: IOException) {
                                     Log.e(TAG, "Might not have internet")
                                     return@launch
-                                }catch (e: HttpException){
+                                } catch (e: HttpException) {
                                     Log.e(TAG, "Unexpected response")
                                     return@launch
-                                }
-                                catch(e: Exception) {
+                                } catch (e: Exception) {
                                     Log.e(TAG, "exception while handling api request: $e")
                                     return@launch
                                 }
@@ -89,68 +93,10 @@ class MainActivity : ComponentActivity() {
                         }) {
                             Text(text = "Make API Call")
                         }
-                    Spacer(modifier = Modifier.height(30.dp))
-                    //LOADS HOME SCREEN
-                    TheSportApp()
-
-// COLUMN BRACKET
+                        Spacer(modifier = Modifier.height(30.dp))
+                        HomeScreen(Modifier.padding(padding))
+                    }
                 }
-            }
-        }
-    }
-}
-
-@Composable
-fun TodaysGameCard(
-    contentDescriptionTeam1: String,
-    contentDescriptionTeam2: String,
-    logoTeam1: Painter,
-    logoTeam2: Painter,
-    modifier: Modifier = Modifier){
-
-    Card(
-        modifier = modifier
-            .width(250.dp)
-            .height(100.dp),
-        shape = RoundedCornerShape(15.dp),
-        elevation = 5.dp
-    ) {
-        Column(modifier = Modifier
-            .fillMaxWidth(),
-            verticalArrangement = Arrangement.SpaceEvenly) {
-
-            //Team 1
-            Row(modifier = modifier
-                .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly) {
-
-                //team image
-                Image(painter = logoTeam1, contentDescription = contentDescriptionTeam1, contentScale = ContentScale.FillBounds,modifier = modifier
-                    .size(40.dp)
-                    .clip(CircleShape))
-
-                //team name
-                Text(text = "Toronto Maple Leafs", fontSize = 14.sp, fontFamily = FontFamily.Default)
-
-                //team score
-                Text(text = "3")
-            }
-
-            //Team 2
-            Row(modifier = modifier
-                .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly) {
-
-                //team image
-                Image(painter = logoTeam2, contentDescription = contentDescriptionTeam2, contentScale = ContentScale.FillBounds, modifier = modifier
-                    .size(40.dp)
-                    .clip(CircleShape))
-
-                //team name
-                Text(text = "Colorado Avalanche", fontSize = 14.sp, fontFamily = FontFamily.Default)
-
-                //team score
-                Text(text = "3")
             }
         }
     }
@@ -270,7 +216,7 @@ fun AlignTodaysGames(
     ) {
         //TODO pass a list and send each team instance to create a card
         items(4) {
-            TodaysGameCard(contentDescriptionTeam1, contentDescriptionTeam2, logoTeam1, logoTeam2)
+            GameCard(contentDescriptionTeam1, contentDescriptionTeam2, logoTeam1, logoTeam2)
         }
     }
 }
@@ -299,7 +245,7 @@ fun AlignBettingInfo(
 
 //Home section - Slot APIs
 @Composable
-fun HomeSection(
+fun HomeSection( // might be considered as "too refactored"
     @StringRes title: Int,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
@@ -334,17 +280,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     }
 }
 
-// Step: MySoothe App - Scaffold
-@Composable
-fun TheSportApp() {
-    TheSportTheme() {
-        Scaffold(
-        ) { padding ->
-            HomeScreen(Modifier.padding(padding))
-        }
-    }
-}
-
 @Preview (showBackground = true)
 @Composable
 fun TodaysGamesPreview(){
@@ -353,7 +288,7 @@ fun TodaysGamesPreview(){
         val team2Logo = painterResource(id = R.drawable.avs)
         val descriptionTeam1 = "Toronto Maple Leafs"
         val descriptionTeam2 = "Colorado Avalanche"
-        TodaysGameCard(descriptionTeam1, descriptionTeam2, team1Logo , team2Logo)
+        GameCard(descriptionTeam1, descriptionTeam2, team1Logo , team2Logo)
     }
 }
 
