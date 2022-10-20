@@ -11,9 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.thesport.ui.theme.TheSportTheme
+import com.example.thesport.R
 
 @Composable
 fun GameCard(
@@ -69,5 +73,17 @@ fun GameCard(
                 Text(text = "3")
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TodaysGamesPreview(){
+    TheSportTheme() {
+        val team1Logo = painterResource(id = R.drawable.leafs)
+        val team2Logo = painterResource(id = R.drawable.avs)
+        val descriptionTeam1 = "Toronto Maple Leafs"
+        val descriptionTeam2 = "Colorado Avalanche"
+        GameCard(descriptionTeam1, descriptionTeam2, team1Logo , team2Logo)
     }
 }
