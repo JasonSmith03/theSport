@@ -31,13 +31,3 @@ interface SportApi {
         const val BASE_URL = "https://v1.hockey.api-sports.io"
     }
 }
-
-object TheSportRetrofitInstance{
-    val api: SportApi by lazy {
-        Retrofit.Builder()
-            .baseUrl(SportApi.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(SportApi::class.java)
-    }
-}

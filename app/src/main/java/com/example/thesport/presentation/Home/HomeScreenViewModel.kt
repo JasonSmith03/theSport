@@ -1,20 +1,24 @@
-package com.example.thesport.presentation.HomeScreen
+package com.example.thesport.presentation.Home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.thesport.data.remote.TheSportRetrofitInstance
+import com.example.thesport.domain.repository.SportRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import javax.inject.Inject
 
-
-class HomeScreenViewModel: ViewModel() {
+@HiltViewModel
+class HomeScreenViewModel @Inject constructor(
+    private val repository: SportRepository
+): ViewModel() {
 
     fun apiStatus() {
         viewModelScope.launch {
             val status = try {
-                TheSportRetrofitInstance.api.getStatus()
+                repository.getApiStatus()
             } catch (e: Exception) {
                 Log.e(TAG, "exception while getting api status:")
                 e // status = e
@@ -27,7 +31,7 @@ class HomeScreenViewModel: ViewModel() {
     fun testApiCall() {
         viewModelScope.launch() {
             val response = try { //working api call for status
-                TheSportRetrofitInstance.api.getLeagues(NHL)
+                repository.getLeague(NHL)
             } catch (e: IOException) {
                 Log.e(TAG, "Might not have internet")
                 return@launch
