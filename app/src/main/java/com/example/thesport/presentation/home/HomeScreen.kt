@@ -1,4 +1,4 @@
-package com.example.thesport.presentation.Home
+package com.example.thesport.presentation.home
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,8 +16,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.thesport.R
 import com.ramcosta.composedestinations.annotation.Destination
 import java.util.*
-
-const val TAG = "HomeScreen"
 
 @Destination(start = true)
 @Composable

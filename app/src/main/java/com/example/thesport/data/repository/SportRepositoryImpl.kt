@@ -4,12 +4,18 @@ import com.example.thesport.data.remote.SportApi
 import com.example.thesport.domain.model.League
 import com.example.thesport.domain.model.Status
 import com.example.thesport.domain.repository.SportRepository
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SportRepositoryImpl @Inject constructor(
     private val api: SportApi,
 ): SportRepository {
+
+    /*
+     * Note:
+     *     these functions can become more complicated which is why we separate from the domain
+     *     layer and remote api call.
+     */
+
     override suspend fun getApiStatus(): Status {
         return api.getStatus()
     }

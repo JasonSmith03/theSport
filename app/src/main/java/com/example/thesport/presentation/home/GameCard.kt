@@ -1,4 +1,4 @@
-package com.example.thesport.presentation.Home
+package com.example.thesport.presentation.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
