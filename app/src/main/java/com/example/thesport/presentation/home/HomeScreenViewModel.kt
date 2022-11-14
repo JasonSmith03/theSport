@@ -10,6 +10,8 @@ import com.example.thesport.domain.model.Games
 import com.example.thesport.domain.model.Matchup
 import com.example.thesport.domain.repository.SportRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -21,8 +23,11 @@ class HomeScreenViewModel @Inject constructor(
     private val repository: SportRepository
 ): ViewModel() {
 
-    private val _listOfMatchups =  MutableLiveData<MutableList<Matchup>>()
-    val listOfMatchups: LiveData<MutableList<Matchup>> = _listOfMatchups
+//    private val _listOfMatchups =  MutableLiveData<MutableList<Matchup>>()
+//    val listOfMatchups: LiveData<MutableList<Matchup>> = _listOfMatchups
+
+    private val _listOfMatchups = MutableStateFlow(mutableListOf<Matchup>())
+    val listOfMatchups: StateFlow<MutableList<Matchup>> = _listOfMatchups
 
     private val _listOfGames =  MutableLiveData<Games>()
     val listOfGames: LiveData<Games> = _listOfGames
@@ -34,7 +39,8 @@ class HomeScreenViewModel @Inject constructor(
                 //DATE TIME FORMAT: YYYY-MM-DDThh:mm:ss.mss
                 val currentDate = LocalDateTime.now()
                 _listOfMatchups.value = repository.getListOfMatchups(NHL, currentDate.year, currentDate.year.toString() + "-" + currentDate.monthValue.toString() + "-" + currentDate.dayOfMonth.toString())
-                //_listOfGames.value = repository.getGame(NHL, currentDate.year, currentDate.year.toString() + "-" + currentDate.monthValue.toString() + "-" + currentDate.dayOfMonth.toString())
+                Log.d(TAG, _listOfMatchups.value.toString())
+             //_listOfGames.value = repository.getGame(NHL, currentDate.year, currentDate.year.toString() + "-" + currentDate.monthValue.toString() + "-" + currentDate.dayOfMonth.toString())
 
             } catch (e: IOException) {
                 Log.e(TAG, "Might not have internet")

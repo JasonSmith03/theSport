@@ -8,6 +8,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -18,10 +19,12 @@ import com.example.thesport.R
 import com.example.thesport.presentation.home.destinations.HomeScreenDestination
 import com.example.thesport.presentation.home.destinations.ProfileDestination
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.util.*
 
-@Destination(start = true)
+@Destination
+@RootNavGraph(start = true)
 @Composable
 fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
@@ -32,10 +35,9 @@ fun HomeScreen(
     val team2Logo = painterResource(id = R.drawable.avs)
     val descriptionTeam1 = "Toronto Maple Leafs"
     val descriptionTeam2 = "Colorado Avalanche"
-    val homeName = "Leafs"
-    val awayName = "Avalanche"
-    val homeScore = "3"
-    val awayScore = "2"
+
+    val matchupList = viewModel.listOfMatchups.collectAsState()
+//    val testingVal = viewModel.listOfGames.observe()
 
     Column() {
         Button(onClick = {
@@ -67,12 +69,9 @@ fun HomeScreen(
         ) {
 
             //TODO pass a list and send each team instance to create a card
-            val matchupList = viewModel.listOfMatchups.value
-            Log.d("HOME SCREEN TAG", "matchupList: " + matchupList )
-            matchupList?.let {
-                items(it.size) {
-                    GameCard(matchupList[it])
-                }
+            Log.d("HOME SCREEN TAG", "matchupList: $matchupList")
+            items(matchupList.value.size) {
+                GameCard(matchupList.value[it])
             }
         }
         Spacer(Modifier.height(16.dp))
