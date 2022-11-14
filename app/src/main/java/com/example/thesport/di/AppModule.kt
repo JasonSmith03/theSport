@@ -1,6 +1,7 @@
 package com.example.thesport.di
 
 import com.example.thesport.data.remote.SportApi
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

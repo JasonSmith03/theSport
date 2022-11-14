@@ -1,5 +1,6 @@
 package com.example.thesport.presentation.home
 
+import android.widget.ImageView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -16,18 +17,19 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.example.thesport.presentation.ui.theme.TheSportTheme
 import com.example.thesport.R
+import com.example.thesport.domain.model.Matchup
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun GameCard(
-    contentDescriptionTeam1: String,
-    contentDescriptionTeam2: String,
-    logoTeam1: Painter,
-    logoTeam2: Painter,
+    matchup: Matchup,
     modifier: Modifier = Modifier
 ){
-
+    
     Card(
         modifier = modifier
             .width(250.dp)
@@ -35,6 +37,7 @@ fun GameCard(
         shape = RoundedCornerShape(15.dp),
         elevation = 5.dp
     ) {
+        
         Column(modifier = Modifier
             .fillMaxWidth(),
             verticalArrangement = Arrangement.SpaceEvenly) {
@@ -45,45 +48,46 @@ fun GameCard(
                 horizontalArrangement = Arrangement.SpaceEvenly) {
 
                 //team image
-                Image(painter = logoTeam1, contentDescription = contentDescriptionTeam1, contentScale = ContentScale.FillBounds,modifier = modifier
+                Image(painter = rememberImagePainter(matchup.homeLogo), contentDescription = matchup.homeName, modifier = modifier
                     .size(40.dp)
                     .clip(CircleShape))
+//                Image(painter = , contentDescription = matchup.homeName, contentScale = ContentScale.FillBounds,modifier = modifier
+//                    .size(40.dp)
+//                    .clip(CircleShape))
 
                 //team name
-                Text(text = "Toronto Maple Leafs", fontSize = 14.sp, fontFamily = FontFamily.Default)
+                Text(text = matchup.homeName, fontSize = 14.sp, fontFamily = FontFamily.Default)
 
                 //team score
-                Text(text = "3")
+                Text(text = matchup.homeScore)
             }
 
             //Team 2
             Row(modifier = modifier
                 .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly) {
-
                 //team image
-                Image(painter = logoTeam2, contentDescription = contentDescriptionTeam2, contentScale = ContentScale.FillBounds, modifier = modifier
+                Image(painter = rememberImagePainter(matchup.awayLogo), contentDescription = matchup.awayName, modifier = modifier
                     .size(40.dp)
                     .clip(CircleShape))
+//                Image(painter = matchup.awayLogo, contentDescription = matchup.awayName, contentScale = ContentScale.FillBounds, modifier = modifier
+//                    .size(40.dp)
+//                    .clip(CircleShape))
 
                 //team name
-                Text(text = "Colorado Avalanche", fontSize = 14.sp, fontFamily = FontFamily.Default)
+                Text(text = matchup.awayName, fontSize = 14.sp, fontFamily = FontFamily.Default)
 
                 //team score
-                Text(text = "3")
+                Text(text = matchup.awayScore)
             }
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TodaysGamesPreview(){
-    TheSportTheme() {
-        val team1Logo = painterResource(id = R.drawable.leafs)
-        val team2Logo = painterResource(id = R.drawable.avs)
-        val descriptionTeam1 = "Toronto Maple Leafs"
-        val descriptionTeam2 = "Colorado Avalanche"
-        GameCard(descriptionTeam1, descriptionTeam2, team1Logo , team2Logo)
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun TodaysGamesPreview(){
+//    TheSportTheme() {
+//        GameCard(matchup., descriptionTeam2, team1Logo , team2Logo, homeName, awayName, homeScore, awayScore)
+//    }
+//}
