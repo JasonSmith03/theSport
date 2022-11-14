@@ -55,10 +55,10 @@ class SportRepositoryImpl @Inject constructor(
                 Matchup(
                     responseElem.teams.home.logo,
                     responseElem.teams.home.name,
-                    responseElem.scores.home.toString(),
+                    responseElem.scores.home?.toString() ?: responseElem.status.short,
                     responseElem.teams.away.logo,
                     responseElem.teams.away.name,
-                    responseElem.scores.away.toString()
+                    responseElem.scores.away?.toString() ?: responseElem.status.short
                 )
             )
         }

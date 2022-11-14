@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.example.thesport.presentation.ui.theme.TheSportTheme
 import com.example.thesport.R
@@ -48,12 +49,11 @@ fun GameCard(
                 horizontalArrangement = Arrangement.SpaceEvenly) {
 
                 //team image
-                Image(painter = rememberImagePainter(matchup.homeLogo), contentDescription = matchup.homeName, modifier = modifier
-                    .size(40.dp)
-                    .clip(CircleShape))
-//                Image(painter = , contentDescription = matchup.homeName, contentScale = ContentScale.FillBounds,modifier = modifier
-//                    .size(40.dp)
-//                    .clip(CircleShape))
+                AsyncImage(
+                    model = matchup.homeLogo,
+                    contentDescription = matchup.homeName,
+                    modifier = modifier.size(40.dp).clip(CircleShape)
+                )
 
                 //team name
                 Text(text = matchup.homeName, fontSize = 14.sp, fontFamily = FontFamily.Default)
@@ -67,12 +67,11 @@ fun GameCard(
                 .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly) {
                 //team image
-                Image(painter = rememberImagePainter(matchup.awayLogo), contentDescription = matchup.awayName, modifier = modifier
-                    .size(40.dp)
-                    .clip(CircleShape))
-//                Image(painter = matchup.awayLogo, contentDescription = matchup.awayName, contentScale = ContentScale.FillBounds, modifier = modifier
-//                    .size(40.dp)
-//                    .clip(CircleShape))
+                AsyncImage(
+                    model = matchup.awayLogo,
+                    contentDescription = matchup.awayName,
+                    modifier = modifier.size(40.dp).clip(CircleShape)
+                )
 
                 //team name
                 Text(text = matchup.awayName, fontSize = 14.sp, fontFamily = FontFamily.Default)
