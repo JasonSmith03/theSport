@@ -12,4 +12,8 @@ interface SportRepository {
     suspend fun getGame(leagueId: Int, seasonYr: Int, date: String): Games
 
     suspend fun getListOfMatchups(leagueId: Int, seasonYr: Int, date: String): MutableList<Matchup>
+
+    suspend fun getOdds(league: Int, season: Int, bookmaker: Int, betType: Int): HashMap<Int, MutableList<String>>
+
+
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.thesport.domain.model.GameResponse
 import com.example.thesport.domain.model.Games
 import com.example.thesport.domain.model.Matchup
+import com.example.thesport.domain.model.MatchupOdds
 import com.example.thesport.domain.repository.SportRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import java.lang.Thread.State
 import java.time.LocalDateTime
+import java.time.Month
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,19 +32,32 @@ class HomeScreenViewModel @Inject constructor(
     private val _listOfMatchups = MutableStateFlow(mutableListOf<Matchup>())
     val listOfMatchups: StateFlow<MutableList<Matchup>> = _listOfMatchups
 
-    private val _listOfGames =  MutableLiveData<Games>()
-    val listOfGames: LiveData<Games> = _listOfGames
+    private val _mapOfMatchupOdds = MutableStateFlow(HashMap<Int, MutableList<String>>())
+    val mapOfMachupOdds: StateFlow<HashMap<Int, MutableList<String>>> = _mapOfMatchupOdds
 
     fun getListOfTodayGames(){
         viewModelScope.launch {
             //working api call for status
              val apiResponse = try {
-                //DATE TIME FORMAT: YYYY-MM-DDThh:mm:ss.mss
-                val currentDate = LocalDateTime.now()
-                _listOfMatchups.value = repository.getListOfMatchups(NHL, currentDate.year, currentDate.year.toString() + "-" + currentDate.monthValue.toString() + "-" + currentDate.dayOfMonth.toString())
-                Log.d(TAG, _listOfMatchups.value.toString())
-             //_listOfGames.value = repository.getGame(NHL, currentDate.year, currentDate.year.toString() + "-" + currentDate.monthValue.toString() + "-" + currentDate.dayOfMonth.toString())
+                 //DATE TIME FORMAT: YYYY-MM-DDThh:mm:ss.mss
+                 // API NEEDS 2 DIGITS FOR THE DATE, ANYTHING < 10 NEEDS TO HAVE A 0 IN FRONT
+                 val currentDate = LocalDateTime.now()
+                 var currentSeason = currentDate.year
 
+                 //Handles year change for NHL season
+                 if (currentDate.month < Month.JULY){
+                     currentSeason = currentDate.year - 1
+                 }
+
+                 //call repository of the Domain layer which will get data from repository of the data layer (Business logic)
+                 //_listOfMatchups.value = repository.getListOfMatchups(NHL, currentSeason, currentDate.toString().substring(0, 10))
+                 Log.d(TAG, "GOT LIST OF GAMES JUST BEFORE CALLING FOR ODDS")
+                 val test = repository.getOdds(NHL, currentSeason, BOOKMAKER, BET)
+                 _mapOfMatchupOdds.value = test
+
+
+                 Log.d(TAG, _listOfMatchups.value.toString())
+                 Log.d(TAG, _mapOfMatchupOdds.value.toString())
             } catch (e: IOException) {
                 Log.e(TAG, "Might not have internet")
                 return@launch
@@ -52,14 +68,8 @@ class HomeScreenViewModel @Inject constructor(
                 Log.e(TAG, "exception while handling api request: $e")
                 return@launch
             }
-            // this response variable is of type Kotlin.Unit
-            // unable to access data object params form here
-            Log.d(TAG, "response: $apiResponse \n")
-            Log.d(TAG, apiResponse.toString())
-            print("response: $apiResponse")
         }
     }
-
 
     fun apiStatus() {
         viewModelScope.launch {
@@ -74,33 +84,11 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-//    fun testApiCall() {
-//        viewModelScope.launch() {
-//            val response = try { //working api call for status
-//                repository.getLeague(NHL)
-//                repository.getGame(NHL, 2022, "2022-11-11")
-//            } catch (e: IOException) {
-//                Log.e(TAG, "Might not have internet")
-//                return@launch
-//            } catch (e: HttpException) {
-//                Log.e(TAG, "Unexpected response")
-//                return@launch
-//            } catch (e: Exception) {
-//                Log.e(TAG, "exception while handling api request: $e")
-//                return@launch
-//            }
-//
-//            // this response variable is of type Kotlin.Unit
-//            // unable to access data object params form here
-//            Log.d(TAG, "response: $response \n")
-//            Log.d(TAG, response.toString())
-//            print("response: $response")
-//        }
-//    }
-
 
     companion object {
         const val TAG = "HomeScreenViewModel"
         const val NHL = 57
+        const val BOOKMAKER = 3
+        const val BET = 1
     }
 }

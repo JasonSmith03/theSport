@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -36,8 +37,10 @@ fun HomeScreen(
     val descriptionTeam1 = "Toronto Maple Leafs"
     val descriptionTeam2 = "Colorado Avalanche"
 
+    //observer of stateFlow
     val matchupList = viewModel.listOfMatchups.collectAsState()
-//    val testingVal = viewModel.listOfGames.observe()
+    val oddsMatchupMap = viewModel.mapOfMachupOdds.collectAsState()
+    //    val testingVal = viewModel.listOfGames.observe() FOR LIVE DATA
 
     Column() {
         Button(onClick = {
@@ -47,6 +50,7 @@ fun HomeScreen(
         }
         Button(onClick = {
             viewModel.getListOfTodayGames()
+            //viewModel.testApiCall()
         }) {
             Text(text = "Make API Call")
         }
@@ -68,7 +72,6 @@ fun HomeScreen(
             contentPadding = PaddingValues(horizontal = 16.dp),
         ) {
 
-            //TODO pass a list and send each team instance to create a card
             Log.d("HOME SCREEN TAG", "matchupList: $matchupList")
             items(matchupList.value.size) {
                 GameCard(matchupList.value[it])
@@ -87,8 +90,9 @@ fun HomeScreen(
             contentPadding = PaddingValues(horizontal = 16.dp),
         ) {
             //TODO pass a list and send each team instance to create a card
-            items(6) {
-                BettingInfoCard(descriptionTeam1, descriptionTeam2, team1Logo, team2Logo)
+            items(oddsMatchupMap.value.size) {
+                oddsMatchupMap.value.get(matchupList.value[it].matchupId)
+                    ?.let { it1 -> BettingInfoCard(matchupList.value[it], it1) }
             }
         }
     }
