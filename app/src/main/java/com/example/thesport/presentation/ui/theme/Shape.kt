@@ -1,4 +1,4 @@
-package com.example.thesport.ui.theme
+package com.example.thesport.presentation.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

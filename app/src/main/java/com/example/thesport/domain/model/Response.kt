@@ -6,9 +6,8 @@ data class Response(
     val name: String,
     //The type of the league
     val type: String,
-    //league logo
-    val logo: String,
-    val country: Country,
     val seasons: List<Season>,
+    val country: Country,
+    val logo: String,
 
-    )
+)

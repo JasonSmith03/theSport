@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">theSport</string>
+    <string name="today_games">Today\'s Games</string>
+    <string name="betting_info">Betting Information</string>
 </resources>
