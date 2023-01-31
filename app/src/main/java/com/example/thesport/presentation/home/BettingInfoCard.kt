@@ -39,7 +39,7 @@ fun BettingInfoCard(
         shape = MaterialTheme.shapes.small
         //elevation = 5.dp
     ) {
-        Row(modifier = modifier
+        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = modifier
             .fillMaxSize()
         ){
             Column(modifier = Modifier
@@ -56,7 +56,9 @@ fun BettingInfoCard(
                     AsyncImage(
                         model = matchup.homeLogo,
                         contentDescription = matchup.homeName,
-                        modifier = modifier.size(40.dp).clip(CircleShape)
+                        modifier = modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
                     )
 //                    Image(painter = logoTeam1, contentDescription = contentDescriptionTeam1, contentScale = ContentScale.Crop, modifier = modifier
 //                        .width(30.dp)
@@ -78,7 +80,9 @@ fun BettingInfoCard(
                     AsyncImage(
                         model = matchup.awayLogo,
                         contentDescription = matchup.awayName,
-                        modifier = modifier.size(40.dp).clip(CircleShape)
+                        modifier = modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
                     )
 //                    Image(painter = logoTeam2, contentDescription = contentDescriptionTeam2, contentScale = ContentScale.Crop, modifier = modifier
 //                        .width(30.dp)
@@ -92,15 +96,20 @@ fun BettingInfoCard(
                 }
             }
             Column(modifier = modifier
-                . width(100.dp)
+                .width(100.dp)
                 .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center) {
                 Row(modifier = modifier
                     .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Text("Home")
+                    Text("Away")
+                }
+                Row(modifier = modifier
+                    .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly) {
                     Text(text = oddsList[0])
                     Text(text = oddsList[1])
-                    Text(text = oddsList[2])
                 }
             }
         }

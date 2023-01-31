@@ -2,6 +2,8 @@ package com.example.thesport.data.remote
 
 import com.example.thesport.BuildConfig
 import com.example.thesport.domain.model.*
+import com.squareup.moshi.Json
+import org.json.JSONObject
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query

@@ -11,9 +11,14 @@ import com.example.thesport.data.remote.SportApi
 import com.example.thesport.domain.model.*
 import com.example.thesport.domain.repository.SportRepository
 import com.example.thesport.presentation.home.HomeScreenViewModel
+import com.squareup.moshi.Json
+import org.json.JSONObject
+import java.text.ChoiceFormat.nextDouble
 import java.time.LocalDateTime
-import java.util.Date
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.HashMap
+import kotlin.random.Random
 
 
 class SportRepositoryImpl @Inject constructor(
@@ -75,29 +80,32 @@ class SportRepositoryImpl @Inject constructor(
         bookmaker: Int,
         betType: Int,
     ): HashMap<Int, MutableList<String>> {
+        //, bookmaker, betType
         val odds: Odds = api.getGameOdds(league, season, bookmaker, betType)
         val hashMap: HashMap<Int, MutableList<String>> = HashMap<Int,MutableList<String>>()
-        val listOfBookmakerValues = mutableListOf<String>()
+        val listOfBookmakerValues:  MutableList<String> = mutableListOf(Math.round(Random.nextDouble(-5.0, 5.0) * 100.0 / 100.0).toString(), Math.round(Random.nextDouble(-5.0, 5.0) * 100.0 / 100.0).toString())
         val currentDate = LocalDateTime.now()
 
         for (responseElem in odds.response){
-            Log.d(HomeScreenViewModel.TAG, odds.response.toString())
+            Log.d(HomeScreenViewModel.TAG, "get odds response" + odds.response.toString())
             if (currentDate.toString().substring(0, 10).equals(responseElem.game.date.substring(0, 10))){
                 for(bookmaker in responseElem.bookmakers){
-                    Log.d(HomeScreenViewModel.TAG, responseElem.bookmakers.toString())
-                    for(bet in bookmaker.bet){
-                        Log.d(HomeScreenViewModel.TAG, bookmaker.bet.toString())
-                        for (value in bet.values){
-                            Log.d(HomeScreenViewModel.TAG, bet.values.toString())
-                            listOfBookmakerValues.add(value.odd)
-                            hashMap.put(responseElem.game.id, listOfBookmakerValues)
+                    Log.d(HomeScreenViewModel.TAG, "response bookmaker" + responseElem.bookmakers.toString())
+                    if (bookmaker.bet == null) {
+                        hashMap[responseElem.game.id] = listOfBookmakerValues
+                    }else {
+                        for(bet in bookmaker.bet){
+                            Log.d(HomeScreenViewModel.TAG, bookmaker.bet.toString())
+                            for (value in bet.values){
+                                Log.d(HomeScreenViewModel.TAG, bet.values.toString())
+                                listOfBookmakerValues.add(value.odd)
+                                hashMap.put(responseElem.game.id, listOfBookmakerValues)
+                            }
                         }
                     }
                 }
             }
         }
-
         return hashMap
     }
-
 }

@@ -1,6 +1,7 @@
 package com.example.thesport.domain.repository
 
 import com.example.thesport.domain.model.*
+import org.json.JSONObject
 
 interface SportRepository {
     //TODO - implement Resource as part of return values
@@ -14,6 +15,5 @@ interface SportRepository {
     suspend fun getListOfMatchups(leagueId: Int, seasonYr: Int, date: String): MutableList<Matchup>
 
     suspend fun getOdds(league: Int, season: Int, bookmaker: Int, betType: Int): HashMap<Int, MutableList<String>>
-
 
 }

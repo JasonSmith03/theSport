@@ -50,10 +50,12 @@ class HomeScreenViewModel @Inject constructor(
                  }
 
                  //call repository of the Domain layer which will get data from repository of the data layer (Business logic)
-                 //_listOfMatchups.value = repository.getListOfMatchups(NHL, currentSeason, currentDate.toString().substring(0, 10))
+                 _listOfMatchups.value = repository.getListOfMatchups(NHL, currentSeason, currentDate.toString().substring(0, 10))
                  Log.d(TAG, "GOT LIST OF GAMES JUST BEFORE CALLING FOR ODDS")
+                 //, BOOKMAKER, BET
                  val test = repository.getOdds(NHL, currentSeason, BOOKMAKER, BET)
                  _mapOfMatchupOdds.value = test
+                 Log.d(TAG, "_mapOfMatchupOdds.value $test")
 
 
                  Log.d(TAG, _listOfMatchups.value.toString())

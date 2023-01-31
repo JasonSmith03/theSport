@@ -1,14 +1,18 @@
 package com.example.thesport.presentation.home
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,8 +26,10 @@ import com.example.thesport.presentation.home.destinations.ProfileDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.launch
 import java.util.*
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Destination
 @RootNavGraph(start = true)
 @Composable
@@ -31,16 +37,11 @@ fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
-
-    val team1Logo = painterResource(id = R.drawable.leafs)
-    val team2Logo = painterResource(id = R.drawable.avs)
-    val descriptionTeam1 = "Toronto Maple Leafs"
-    val descriptionTeam2 = "Colorado Avalanche"
-
     //observer of stateFlow
     val matchupList = viewModel.listOfMatchups.collectAsState()
     val oddsMatchupMap = viewModel.mapOfMachupOdds.collectAsState()
-    //    val testingVal = viewModel.listOfGames.observe() FOR LIVE DATA
+    //val testingVal = viewModel.listOfGames.observe() FOR LIVE DATA
+
 
     Column() {
         Button(onClick = {
@@ -89,9 +90,8 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(horizontal = 16.dp),
         ) {
-            //TODO pass a list and send each team instance to create a card
             items(oddsMatchupMap.value.size) {
-                oddsMatchupMap.value.get(matchupList.value[it].matchupId)
+                oddsMatchupMap.value[matchupList.value[it].matchupId]
                     ?.let { it1 -> BettingInfoCard(matchupList.value[it], it1) }
             }
         }
