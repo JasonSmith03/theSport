@@ -97,12 +97,15 @@ dependencies {
     kapt "androidx.hilt:hilt-compiler:1.0.0"
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
-    // Compose Nav Destinations
+    // Compose Nav Destinations ramcosta
     implementation 'io.github.raamcosta.compose-destinations:core:1.7.23-beta'
     ksp 'io.github.raamcosta.compose-destinations:ksp:1.7.23-beta'
 
     //Coil
     implementation "io.coil-kt:coil-compose:2.2.2"
+
+    //Navigation
+    implementation("androidx.navigation:navigation-compose:$nav_version")
 }
 
 // Allow references to generated code

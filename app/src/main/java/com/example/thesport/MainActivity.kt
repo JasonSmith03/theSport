@@ -10,7 +10,6 @@ import com.example.thesport.presentation.ui.theme.TheSportTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.manualcomposablecalls.composable
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -19,13 +18,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TheSportTheme {
-//                val scaffoldState = rememberScaffoldState()
-//                val scope = rememberCoroutineScope()
                 DestinationsNavHost(navGraph = NavGraphs.root){
-                    composable(HomeScreenDestination) {
-                        HomeScreen(
-                            navigator = destinationsNavigator,
-                        )
+                    composable(HomeScreenDestination){
+                        HomeScreen(navigator = destinationsNavigator)
                     }
                 }
             }

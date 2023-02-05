@@ -1,14 +1,9 @@
 package com.example.thesport.presentation.home
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.thesport.domain.model.GameResponse
-import com.example.thesport.domain.model.Games
 import com.example.thesport.domain.model.Matchup
-import com.example.thesport.domain.model.MatchupOdds
 import com.example.thesport.domain.repository.SportRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +11,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
-import java.lang.Thread.State
 import java.time.LocalDateTime
 import java.time.Month
 import javax.inject.Inject
