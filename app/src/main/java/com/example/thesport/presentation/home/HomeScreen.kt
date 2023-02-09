@@ -22,7 +22,7 @@ import java.util.*
 @RootNavGraph(start = true)
 @Composable
 fun HomeScreen(
-    viewModel: HomeScreenViewModel = hiltViewModel(),
+    viewModel: HomeScreenViewModel,
 ) {
     //observer of stateFlow
     val matchupList = viewModel.listOfMatchups.collectAsState()

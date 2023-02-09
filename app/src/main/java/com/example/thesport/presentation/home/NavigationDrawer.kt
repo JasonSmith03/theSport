@@ -68,7 +68,7 @@ fun DrawerBody(
 }
 
 @Composable
-fun DrawerContents() {
+fun DrawerContents(homeScreenViewModel: HomeScreenViewModel) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
@@ -125,7 +125,7 @@ fun DrawerContents() {
                     navController = navController
                 ) {
                     composable(HomeScreenDestination){
-                        HomeScreen()
+                        HomeScreen(homeScreenViewModel)
                     }
                     composable(SettingsPageDestination) {
                         SettingsPage()
