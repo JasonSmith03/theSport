@@ -14,6 +14,7 @@ import com.example.thesport.presentation.home.HomeScreenViewModel
 import com.squareup.moshi.Json
 import org.json.JSONObject
 import java.text.ChoiceFormat.nextDouble
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
@@ -83,14 +84,14 @@ class SportRepositoryImpl @Inject constructor(
         //, bookmaker, betType
         val odds: Odds = api.getGameOdds(league, season, bookmaker, betType)
         val hashMap: HashMap<Int, MutableList<String>> = HashMap<Int,MutableList<String>>()
-        val listOfBookmakerValues:  MutableList<String> = mutableListOf(Math.round(Random.nextDouble(-5.0, 5.0) * 100.0 / 100.0).toString(), Math.round(Random.nextDouble(-5.0, 5.0) * 100.0 / 100.0).toString())
-        val currentDate = LocalDateTime.now()
+        val UTCdate = getCurrentUTC()
 
         for (responseElem in odds.response){
             Log.d(HomeScreenViewModel.TAG, "get odds response" + odds.response.toString())
-            if (currentDate.toString().substring(0, 10).equals(responseElem.game.date.substring(0, 10))){
+            if (UTCdate.toString().substring(0, 10).equals(responseElem.game.date.substring(0, 10))){
                 for(bookmaker in responseElem.bookmakers){
                     Log.d(HomeScreenViewModel.TAG, "response bookmaker" + responseElem.bookmakers.toString())
+                    val listOfBookmakerValues:  MutableList<String> = mutableListOf(Math.round(Random.nextDouble(-5.0, 5.0) * 100.0 / 100.0).toString(), Math.round(Random.nextDouble(-5.0, 5.0) * 100.0 / 100.0).toString())
                     if (bookmaker.bet == null) {
                         hashMap[responseElem.game.id] = listOfBookmakerValues
                     }else {
@@ -107,5 +108,12 @@ class SportRepositoryImpl @Inject constructor(
             }
         }
         return hashMap
+    }
+
+    fun getCurrentUTC(): String? {
+        val time = Calendar.getInstance().time
+        val outputFmt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        outputFmt.timeZone = TimeZone.getTimeZone("UTC")
+        return outputFmt.format(time)
     }
 }

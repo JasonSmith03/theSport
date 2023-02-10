@@ -36,6 +36,7 @@ fun HomeScreen(
         }) {
             Text(text = "Make API Call")
         }
+        //viewModel.getListOfTodayGames()
         Spacer(Modifier.height(16.dp))
         Text(
             text = stringResource(R.string.today_games).uppercase(Locale.getDefault()),

@@ -1,5 +1,6 @@
 package com.example.thesport.presentation.home
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,8 +12,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.Month
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,6 +32,7 @@ class HomeScreenViewModel @Inject constructor(
     private val _mapOfMatchupOdds = MutableStateFlow(HashMap<Int, MutableList<String>>())
     val mapOfMachupOdds: StateFlow<HashMap<Int, MutableList<String>>> = _mapOfMatchupOdds
 
+    @SuppressLint("SimpleDateFormat", "WeekBasedYear")
     fun getListOfTodayGames(){
         viewModelScope.launch {
             //working api call for status
@@ -38,18 +42,19 @@ class HomeScreenViewModel @Inject constructor(
                  val currentDate = LocalDateTime.now()
                  var currentSeason = currentDate.year
 
+                 val UTCdate = getCurrentUTC()
+                 Log.d(TAG, "show testigns ${UTCdate}")
+
                  //Handles year change for NHL season
                  if (currentDate.month < Month.JULY){
                      currentSeason = currentDate.year - 1
                  }
 
                  //call repository of the Domain layer which will get data from repository of the data layer (Business logic)
-                 _listOfMatchups.value = repository.getListOfMatchups(NHL, currentSeason, currentDate.toString().substring(0, 10))
+                 _listOfMatchups.value = repository.getListOfMatchups(NHL, currentSeason, UTCdate.toString().substring(0, 10))
                  Log.d(TAG, "GOT LIST OF GAMES JUST BEFORE CALLING FOR ODDS")
                  //, BOOKMAKER, BET
-                 val test = repository.getOdds(NHL, currentSeason, BOOKMAKER, BET)
-                 _mapOfMatchupOdds.value = test
-                 Log.d(TAG, "_mapOfMatchupOdds.value $test")
+                 _mapOfMatchupOdds.value = repository.getOdds(NHL, currentSeason, BOOKMAKER, BET)
 
 
                  Log.d(TAG, _listOfMatchups.value.toString())
@@ -78,6 +83,13 @@ class HomeScreenViewModel @Inject constructor(
             Log.d(TAG, "Status: $status")
             print("Status: $status")
         }
+    }
+
+    fun getCurrentUTC(): String? {
+        val time = Calendar.getInstance().time
+        val outputFmt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        outputFmt.timeZone = TimeZone.getTimeZone("UTC")
+        return outputFmt.format(time)
     }
 
 

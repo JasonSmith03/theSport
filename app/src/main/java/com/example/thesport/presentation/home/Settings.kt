@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -15,9 +16,11 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun SettingsPage(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val checkedState = remember { mutableStateOf(false) }
+    val switchState = remember {
+        mutableStateOf(true)
+    }
 
     Column {
         Row(
@@ -26,9 +29,10 @@ fun SettingsPage(
         ) {
             Text(text = "Dark Theme")
             Switch(
-                checked = checkedState.value,
-                onCheckedChange = { checkedState.value = it }
+                checked = switchState.value,
+                onCheckedChange = {switchState.value=it}
             )
+
         }
     }
 }
