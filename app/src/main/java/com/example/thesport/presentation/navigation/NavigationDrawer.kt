@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.thesport.domain.model.MenuItem
 import com.example.thesport.presentation.home.destinations.HomeScreenDestination
 import com.example.thesport.presentation.home.destinations.SettingsPageDestination
+import com.example.thesport.presentation.settings.SettingsViewModel
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.manualcomposablecalls.composable
 import com.ramcosta.composedestinations.navigation.navigate
@@ -68,7 +69,7 @@ fun DrawerBody(
 }
 
 @Composable
-fun DrawerContents(homeScreenViewModel: HomeScreenViewModel) {
+fun DrawerContents(homeScreenViewModel: HomeScreenViewModel, settingsViewModel: SettingsViewModel) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
@@ -128,7 +129,7 @@ fun DrawerContents(homeScreenViewModel: HomeScreenViewModel) {
                         HomeScreen(homeScreenViewModel)
                     }
                     composable(SettingsPageDestination) {
-                        SettingsPage()
+                        SettingsPage(settingsViewModel)
                     }
                 }
             }

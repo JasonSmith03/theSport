@@ -5,11 +5,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Transparent
-import androidx.core.graphics.toColor
 import com.example.thesport.presentation.home.DrawerContents
 import com.example.thesport.presentation.home.HomeScreenViewModel
+import com.example.thesport.presentation.settings.SettingsViewModel
 import com.example.thesport.presentation.ui.theme.TheSportTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,12 +15,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val homeScreenViewModel: HomeScreenViewModel by viewModels()
+    private val settingsViewModel: SettingsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             TheSportTheme {
-                DrawerContents(homeScreenViewModel)
+                DrawerContents(homeScreenViewModel, settingsViewModel)
             }
         }
     }

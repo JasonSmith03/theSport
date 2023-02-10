@@ -7,32 +7,40 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.example.thesport.presentation.settings.SettingsViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination
 @Composable
 fun SettingsPage(
-    modifier: Modifier = Modifier,
+//    modifier: Modifier = Modifier,
+    viewModel: SettingsViewModel
 ) {
-    val switchState = remember {
-        mutableStateOf(true)
-    }
+
+    val switchState = viewModel.switchState.collectAsState()
 
     Column {
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-            Text(text = "Dark Theme")
+            Text(text = "Change odds display")
             Switch(
                 checked = switchState.value,
-                onCheckedChange = {switchState.value=it}
+                onCheckedChange = {
+                    viewModel.setSwitchState(!switchState.value)
+                }
             )
+        }
+    }
 
+    DisposableEffect(viewModel) {
+        onDispose {
+            viewModel.updateSwitchState()
         }
     }
 }
