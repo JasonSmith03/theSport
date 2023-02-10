@@ -1,34 +1,37 @@
 package com.example.thesport
 
-import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.example.thesport.presentation.home.*
-import com.example.thesport.presentation.home.destinations.HomeScreenDestination
+import androidx.activity.viewModels
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.core.graphics.toColor
+import com.example.thesport.presentation.home.DrawerContents
+import com.example.thesport.presentation.home.HomeScreenViewModel
 import com.example.thesport.presentation.ui.theme.TheSportTheme
-import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.manualcomposablecalls.composable
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+
+    private val homeScreenViewModel: HomeScreenViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             TheSportTheme {
-//                val scaffoldState = rememberScaffoldState()
-//                val scope = rememberCoroutineScope()
-                DestinationsNavHost(navGraph = NavGraphs.root){
-                    composable(HomeScreenDestination) {
-                        HomeScreen(
-                            navigator = destinationsNavigator,
-                        )
-                    }
-                }
+                DrawerContents(homeScreenViewModel)
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        when(this.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)){
+            Configuration.UI_MODE_NIGHT_NO -> {window.statusBarColor = resources.getColor(R.color.purple_500, null)}
+            else -> {window.statusBarColor = resources.getColor(R.color.black, null)}
         }
     }
 }
