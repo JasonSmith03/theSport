@@ -91,7 +91,7 @@ class SportRepositoryImpl @Inject constructor(
             if (UTCdate.toString().substring(0, 10).equals(responseElem.game.date.substring(0, 10))){
                 for(bookmaker in responseElem.bookmakers){
                     Log.d(HomeScreenViewModel.TAG, "response bookmaker" + responseElem.bookmakers.toString())
-                    val listOfBookmakerValues:  MutableList<String> = mutableListOf(Math.round(Random.nextDouble(-5.0, 5.0) * 100.0 / 100.0).toString(), Math.round(Random.nextDouble(-5.0, 5.0) * 100.0 / 100.0).toString())
+                    val listOfBookmakerValues:  MutableList<String> = mutableListOf(Random.nextInt(-500, 500).toString(), Random.nextInt(-500, 500) .toString())
                     if (bookmaker.bet == null) {
                         hashMap[responseElem.game.id] = listOfBookmakerValues
                     }else {

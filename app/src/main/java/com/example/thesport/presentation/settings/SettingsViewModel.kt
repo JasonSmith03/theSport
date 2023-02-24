@@ -13,10 +13,7 @@ class SettingsViewModel @Inject constructor(
     private val prefs: SharedPreferences
 ): ViewModel(){
 
-    private val _switchState = MutableStateFlow(prefs.getBoolean(
-        SWITCH_STATE,
-        false)
-    )
+    private val _switchState = MutableStateFlow(prefs.getBoolean(SWITCH_STATE, false))
     val switchState: StateFlow<Boolean> = _switchState
 
     private val originalSwitchState = _switchState.value

@@ -31,7 +31,7 @@ fun HomeScreen(
 
     Column {
         Button(onClick = {
-            viewModel.getListOfTodayGames()
+            viewModel.homeScreenInfoDisplay()
             //viewModel.testApiCall()
         }) {
             Text(text = "Make API Call")
@@ -40,7 +40,7 @@ fun HomeScreen(
         Spacer(Modifier.height(16.dp))
         Text(
             text = stringResource(R.string.today_games).uppercase(Locale.getDefault()),
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.h6,
             modifier = Modifier
                 .paddingFromBaseline(top = 40.dp, bottom = 8.dp)
                 .padding(horizontal = 16.dp)

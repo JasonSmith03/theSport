@@ -38,6 +38,7 @@ fun SettingsPage(
         }
     }
 
+    //execute this code when leaving the composable
     DisposableEffect(viewModel) {
         onDispose {
             viewModel.updateSwitchState()

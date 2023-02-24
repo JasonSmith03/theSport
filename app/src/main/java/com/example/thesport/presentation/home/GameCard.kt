@@ -2,6 +2,7 @@ package com.example.thesport.presentation.home
 
 import android.widget.ImageView
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,9 +35,10 @@ fun GameCard(
     Card(
         modifier = modifier
             .width(250.dp)
-            .height(100.dp),
+            .height(100.dp)
+            .clickable {  },
         shape = RoundedCornerShape(15.dp),
-        elevation = 5.dp
+        elevation = 5.dp,
     ) {
         
         Column(modifier = Modifier

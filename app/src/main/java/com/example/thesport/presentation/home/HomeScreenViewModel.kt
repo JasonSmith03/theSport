@@ -33,7 +33,7 @@ class HomeScreenViewModel @Inject constructor(
     val mapOfMachupOdds: StateFlow<HashMap<Int, MutableList<String>>> = _mapOfMatchupOdds
 
     @SuppressLint("SimpleDateFormat", "WeekBasedYear")
-    fun getListOfTodayGames(){
+    fun homeScreenInfoDisplay(){
         viewModelScope.launch {
             //working api call for status
              val apiResponse = try {
@@ -70,6 +70,10 @@ class HomeScreenViewModel @Inject constructor(
                 return@launch
             }
         }
+    }
+
+    fun getMatchupStats(){
+
     }
 
     fun apiStatus() {
