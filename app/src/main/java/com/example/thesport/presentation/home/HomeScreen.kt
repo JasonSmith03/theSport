@@ -12,7 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.thesport.R
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -23,6 +23,7 @@ import java.util.*
 @Composable
 fun HomeScreen(
     viewModel: HomeScreenViewModel,
+    navController: NavController,
 ) {
     //observer of stateFlow
     val matchupList = viewModel.listOfMatchups.collectAsState()
@@ -52,7 +53,7 @@ fun HomeScreen(
 
             Log.d("HOME SCREEN TAG", "matchupList: $matchupList")
             items(matchupList.value.size) {
-                GameCard(matchupList.value[it])
+                GameCard(matchupList.value[it], navController)
             }
         }
         Spacer(Modifier.height(16.dp))

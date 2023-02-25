@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import com.example.thesport.presentation.home.DrawerContents
 import com.example.thesport.presentation.home.HomeScreenViewModel
+import com.example.thesport.presentation.navigation.DrawerContents
 import com.example.thesport.presentation.settings.SettingsViewModel
 import com.example.thesport.presentation.ui.theme.TheSportTheme
 import dagger.hilt.android.AndroidEntryPoint
